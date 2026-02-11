@@ -80,57 +80,128 @@ export default function HomePage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative z-10 flex flex-col items-center justify-center text-center px-4 pt-20 pb-24 sm:pt-28 sm:pb-32">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center gap-6 max-w-3xl"
-        >
-          <motion.div variants={fadeUp} custom={0} className="relative">
-            <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-primary/30 to-neon-green/20 flex items-center justify-center glow-cyan">
-              <Hexagon size={56} className="text-primary" />
-            </div>
-          </motion.div>
-
-          <motion.p variants={fadeUp} custom={1} className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            $MOLT · Token ERC-20
-          </motion.p>
-
-          <motion.h1
-            variants={fadeUp}
-            custom={2}
-            className="text-4xl sm:text-6xl lg:text-7xl font-black leading-tight"
+      <section className="relative z-10 px-4 pt-16 pb-20 sm:pt-24 sm:pb-28">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
+          {/* LEFT — App content */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-5 lg:w-1/2 text-center lg:text-left items-center lg:items-start"
           >
-            <span className="text-glow-cyan">Moltbook</span>{" "}
-            <span className="bg-gradient-to-r from-neon-green to-primary bg-clip-text text-transparent">
-              Network
-            </span>
-          </motion.h1>
+            <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/30 to-neon-green/20 flex items-center justify-center glow-cyan">
+                <Hexagon size={28} className="text-primary" />
+              </div>
+              <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">$MOLT · ERC-20</span>
+            </motion.div>
 
-          <motion.p variants={fadeUp} custom={3} className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-            La memecoin que impulsa una red de agentes cognitivos.
-            Colabora, aprende y gana recompensas en un ecosistema de
-            conocimiento descentralizado e interconectado.
-          </motion.p>
+            <motion.h1
+              variants={fadeUp}
+              custom={1}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight"
+            >
+              <span className="text-glow-cyan">Moltbook</span>{" "}
+              <span className="bg-gradient-to-r from-neon-green to-primary bg-clip-text text-transparent">
+                Network
+              </span>
+            </motion.h1>
 
-          <motion.div variants={fadeUp} custom={4} className="flex flex-wrap items-center justify-center gap-3 pt-4">
-            <Button size="lg" className="bg-gradient-to-r from-primary to-neon-green text-background font-bold gap-2 hover:opacity-90 transition-opacity" onClick={() => navigate("/map")}>
-              Ver Mapa Cognitivo <ArrowRight size={18} />
-            </Button>
-            <Button size="lg" variant="outline" className="neon-border gap-2">
-              <Users size={18} /> Unirse a la comunidad
-            </Button>
-            <Button size="lg" variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
-              <Wallet size={18} /> Mi Wallet
-            </Button>
+            <motion.p variants={fadeUp} custom={2} className="text-base sm:text-lg text-muted-foreground max-w-md leading-relaxed">
+              La memecoin que impulsa una red de agentes cognitivos.
+              Colabora, aprende y gana recompensas en un ecosistema de
+              conocimiento descentralizado.
+            </motion.p>
+
+            <motion.div variants={fadeUp} custom={3} className="flex flex-wrap gap-3 pt-2">
+              <Button size="lg" className="bg-gradient-to-r from-primary to-neon-green text-background font-bold gap-2 hover:opacity-90 transition-opacity" onClick={() => navigate("/map")}>
+                Ver Mapa Cognitivo <ArrowRight size={18} />
+              </Button>
+              <Button size="lg" variant="outline" className="neon-border gap-2">
+                <Users size={18} /> Comunidad
+              </Button>
+              <Button size="lg" variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
+                <Wallet size={18} /> Wallet
+              </Button>
+            </motion.div>
           </motion.div>
-        </motion.div>
+
+          {/* RIGHT — Futuristic orb */}
+          <div className="lg:w-1/2 flex items-center justify-center">
+            <div className="relative w-72 h-72 sm:w-96 sm:h-96">
+              {/* Rotating rings */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 rounded-full border border-primary/20"
+              />
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-4 rounded-full border border-neon-green/15"
+              />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-10 rounded-full border border-neon-amber/10"
+              />
+
+              {/* Orbiting dots */}
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <motion.div
+                  key={i}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10 + i * 4, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0"
+                  style={{ transformOrigin: "center" }}
+                >
+                  <div
+                    className="absolute w-2 h-2 rounded-full glow-cyan"
+                    style={{
+                      background: `hsl(${185 + i * 30}, 70%, 55%)`,
+                      top: `${8 + i * 8}%`,
+                      left: "50%",
+                    }}
+                  />
+                </motion.div>
+              ))}
+
+              {/* Central glow orb */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-32 h-32 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-primary/20 via-neon-green/10 to-transparent flex items-center justify-center glow-cyan"
+                >
+                  <Hexagon size={48} className="text-primary" />
+                </motion.div>
+              </div>
+
+              {/* Floating data labels */}
+              {[
+                { label: "100M MOLT", x: "0%", y: "40%", delay: 0 },
+                { label: "1,247 Agents", x: "75%", y: "15%", delay: 0.5 },
+                { label: "+8.4K txns", x: "70%", y: "80%", delay: 1 },
+              ].map((item) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0.4, 0.9, 0.4] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: item.delay }}
+                  className="absolute glass rounded-md px-2 py-1 text-[10px] text-muted-foreground whitespace-nowrap"
+                  style={{ left: item.x, top: item.y }}
+                >
+                  {item.label}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
-          className="mt-16 animate-bounce"
+          className="flex justify-center mt-12 animate-bounce"
         >
           <ChevronDown size={24} className="text-muted-foreground" />
         </motion.div>
