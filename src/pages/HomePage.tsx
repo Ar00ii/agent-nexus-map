@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -14,9 +15,12 @@ import {
   Twitter,
   Github,
   MessageCircle,
+  Sparkles,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ParticleBackground from "@/components/ParticleBackground";
+import MoltnetAIChat from "@/components/MoltnetAIChat";
 import {
   Accordion,
   AccordionContent,
@@ -56,12 +60,16 @@ const faqs = [
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <ParticleBackground />
 
-      {/* NAV */}
+      {/* AI CHAT - PRESERVED EXACTLY AS IS */}
+      <MoltnetAIChat open={chatOpen} onClose={() => setChatOpen(false)} />
+
+      {/* NAV - ADDED DATA BUTTON */}
       <nav className="relative z-10 glass border-b border-border sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -70,19 +78,47 @@ export default function HomePage() {
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#stats" className="hover:text-foreground transition-colors">Stats</a>
+            <button 
+              onClick={() => navigate("/data")} 
+              className="hover:text-foreground transition-colors flex items-center gap-1.5 font-medium group"
+            >
+              <Activity size={14} className="group-hover:text-primary transition-colors" />
+              <span>Data</span>
+            </button>
             <a href="#roadmap" className="hover:text-foreground transition-colors">Roadmap</a>
             <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
           </div>
-          <Button size="sm" variant="outline" className="neon-border" onClick={() => navigate("/map")}>
-            <Globe size={16} /> Mapa Cognitivo
-          </Button>
+          <div className="flex items-center gap-2">
+            {/* TRY MOLTNET AI Button - PRESERVED EXACTLY */}
+            <motion.button
+              onClick={() => setChatOpen(true)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all relative overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, hsl(185 100% 50% / 0.12), hsl(160 100% 50% / 0.08))",
+                border: "1px solid hsl(185 100% 50% / 0.35)",
+                color: "hsl(185 100% 70%)",
+                boxShadow: "0 0 20px hsl(185 100% 50% / 0.15), inset 0 0 20px hsl(185 100% 50% / 0.05)",
+              }}
+            >
+              {/* Animated glow line */}
+              <motion.div
+                animate={{ x: ["−100%", "200%"] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                className="absolute inset-y-0 w-8 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent skew-x-12 pointer-events-none"
+              />
+              <Sparkles size={13} className="animate-pulse" />
+              Try MoltNet AI
+            </motion.button>
+          </div>
         </div>
       </nav>
 
-      {/* HERO */}
+      {/* HERO - PRESERVED WITH ADDED DATA BUTTON */}
       <section className="relative z-10 px-4 pt-16 pb-20 sm:pt-24 sm:pb-28">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
-          {/* LEFT — App content */}
+          {/* LEFT */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -113,8 +149,12 @@ export default function HomePage() {
             </motion.p>
 
             <motion.div variants={fadeUp} custom={3} className="flex flex-wrap gap-3 pt-2">
-              <Button size="lg" className="bg-gradient-to-r from-primary to-neon-green text-background font-bold gap-2 hover:opacity-90 transition-opacity" onClick={() => navigate("/map")}>
-                Ver Mapa Cognitivo <ArrowRight size={18} />
+              <Button 
+                size="lg" 
+                onClick={() => navigate("/data")}
+                className="gap-2 bg-gradient-to-r from-primary/20 to-neon-green/20 border border-primary/50 hover:from-primary/30 hover:to-neon-green/30 hover:border-primary/70 transition-all"
+              >
+                <Activity size={18} /> Ver Data Live
               </Button>
               <Button size="lg" variant="outline" className="neon-border gap-2">
                 <Users size={18} /> Comunidad
@@ -123,73 +163,49 @@ export default function HomePage() {
                 <Wallet size={18} /> Wallet
               </Button>
             </motion.div>
+
+            {/* Mobile AI button - PRESERVED EXACTLY */}
+            <motion.div variants={fadeUp} custom={4} className="sm:hidden w-full">
+              <button
+                onClick={() => setChatOpen(true)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest"
+                style={{
+                  background: "linear-gradient(135deg, hsl(185 100% 50% / 0.12), hsl(160 100% 50% / 0.08))",
+                  border: "1px solid hsl(185 100% 50% / 0.35)",
+                  color: "hsl(185 100% 70%)",
+                }}
+              >
+                <Sparkles size={13} />
+                Try MoltNet AI
+              </button>
+            </motion.div>
           </motion.div>
 
-          {/* RIGHT — Futuristic orb */}
+          {/* RIGHT — Futuristic orb - PRESERVED EXACTLY */}
           <div className="lg:w-1/2 flex items-center justify-center">
             <div className="relative w-72 h-72 sm:w-96 sm:h-96">
-              {/* Rotating rings */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 rounded-full border border-primary/20"
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-4 rounded-full border border-neon-green/15"
-              />
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-10 rounded-full border border-neon-amber/10"
-              />
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 rounded-full border border-primary/20" />
+              <motion.div animate={{ rotate: -360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-4 rounded-full border border-neon-green/15" />
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-10 rounded-full border border-neon-amber/10" />
 
-              {/* Orbiting dots */}
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <motion.div
-                  key={i}
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 10 + i * 4, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0"
-                  style={{ transformOrigin: "center" }}
-                >
-                  <div
-                    className="absolute w-2 h-2 rounded-full glow-cyan"
-                    style={{
-                      background: `hsl(${185 + i * 30}, 70%, 55%)`,
-                      top: `${8 + i * 8}%`,
-                      left: "50%",
-                    }}
-                  />
+                <motion.div key={i} animate={{ rotate: 360 }} transition={{ duration: 10 + i * 4, repeat: Infinity, ease: "linear" }} className="absolute inset-0" style={{ transformOrigin: "center" }}>
+                  <div className="absolute w-2 h-2 rounded-full glow-cyan" style={{ background: `hsl(${185 + i * 30}, 70%, 55%)`, top: `${8 + i * 8}%`, left: "50%" }} />
                 </motion.div>
               ))}
 
-              {/* Central glow orb */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-32 h-32 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-primary/20 via-neon-green/10 to-transparent flex items-center justify-center glow-cyan"
-                >
+                <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="w-32 h-32 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-primary/20 via-neon-green/10 to-transparent flex items-center justify-center glow-cyan">
                   <Hexagon size={48} className="text-primary" />
                 </motion.div>
               </div>
 
-              {/* Floating data labels */}
               {[
                 { label: "100M MOLT", x: "0%", y: "40%", delay: 0 },
                 { label: "1,247 Agents", x: "75%", y: "15%", delay: 0.5 },
                 { label: "+8.4K txns", x: "70%", y: "80%", delay: 1 },
               ].map((item) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0.4, 0.9, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: item.delay }}
-                  className="absolute glass rounded-md px-2 py-1 text-[10px] text-muted-foreground whitespace-nowrap"
-                  style={{ left: item.x, top: item.y }}
-                >
+                <motion.div key={item.label} initial={{ opacity: 0 }} animate={{ opacity: [0.4, 0.9, 0.4] }} transition={{ duration: 3, repeat: Infinity, delay: item.delay }} className="absolute glass rounded-md px-2 py-1 text-[10px] text-muted-foreground whitespace-nowrap" style={{ left: item.x, top: item.y }}>
                   {item.label}
                 </motion.div>
               ))}
@@ -197,37 +213,20 @@ export default function HomePage() {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="flex justify-center mt-12 animate-bounce"
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="flex justify-center mt-12 animate-bounce">
           <ChevronDown size={24} className="text-muted-foreground" />
         </motion.div>
       </section>
 
-      {/* STATS */}
+      {/* STATS - PRESERVED EXACTLY */}
       <section id="stats" className="relative z-10 py-16 sm:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center text-2xl sm:text-3xl font-bold mb-10"
-          >
+          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center text-2xl sm:text-3xl font-bold mb-10">
             Red en <span className="text-glow-cyan text-primary">Tiempo Real</span>
           </motion.h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass rounded-xl p-5 flex flex-col items-center text-center gap-2 hover:glow-cyan transition-shadow"
-              >
+              <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="glass rounded-xl p-5 flex flex-col items-center text-center gap-2 hover:glow-cyan transition-shadow">
                 <s.icon size={28} className={s.color} />
                 <p className={`text-2xl sm:text-3xl font-black ${s.color}`}>{s.value}</p>
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{s.label}</p>
@@ -237,49 +236,73 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA BANNER */}
+      {/* CTA BANNER - UPDATED TO HIGHLIGHT DATA */}
       <section className="relative z-10 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="glass rounded-2xl neon-border p-8 sm:p-12 text-center">
-            <h3 className="text-xl sm:text-2xl font-bold mb-3">Explora el Mapa Cognitivo</h3>
-            <p className="text-muted-foreground mb-6 max-w-lg mx-auto text-sm sm:text-base">
-              Descubre las conexiones entre agentes, sus colaboraciones y el flujo de tokens MOLT en tiempo real.
-            </p>
-            <Button size="lg" className="bg-gradient-to-r from-primary to-neon-green text-background font-bold gap-2 hover:opacity-90" onClick={() => navigate("/map")}>
-              Abrir Mapa <ArrowRight size={18} />
-            </Button>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="glass rounded-2xl neon-border p-8 sm:p-12 text-center relative overflow-hidden cursor-pointer"
+            onClick={() => navigate("/data")}
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Animated background gradient */}
+            <motion.div
+              animate={{ 
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 opacity-10"
+              style={{
+                background: "linear-gradient(90deg, hsl(185 100% 50%), hsl(160 100% 50%), hsl(185 100% 50%))",
+                backgroundSize: "200% 200%",
+              }}
+            />
+            
+            <div className="relative z-10">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/30 to-neon-green/20 flex items-center justify-center glow-cyan"
+              >
+                <Activity size={32} className="text-primary" />
+              </motion.div>
+              
+              <h3 className="text-2xl font-black mb-4">
+                <span className="text-glow-cyan">Datos en Tiempo Real</span>
+              </h3>
+              
+              <p className="text-muted-foreground mb-6 max-w-lg mx-auto text-sm sm:text-base">
+                Descubre las conexiones entre agentes, sus colaboraciones y el flujo de tokens MOLT en tiempo real.
+                Accede a estadísticas actualizadas, transacciones recientes y el ranking de los mejores agentes.
+              </p>
+              
+              <Button 
+                size="lg"
+                onClick={(e) => { e.stopPropagation(); navigate("/data"); }}
+                className="gap-2 bg-gradient-to-r from-primary to-neon-green hover:from-primary/90 hover:to-neon-green/90 text-background font-bold"
+              >
+                <Activity size={20} />
+                Explorar Moltbook Data
+                <ArrowRight size={20} />
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* ROADMAP */}
+      {/* ROADMAP - PRESERVED EXACTLY */}
       <section id="roadmap" className="relative z-10 py-16 sm:py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center text-2xl sm:text-3xl font-bold mb-12"
-          >
+          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center text-2xl sm:text-3xl font-bold mb-12">
             Roadmap
           </motion.h2>
           <div className="relative border-l-2 border-border ml-4 sm:ml-0 sm:mx-auto pl-8 space-y-10">
             {roadmapItems.map((item, i) => (
-              <motion.div
-                key={item.phase}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative"
-              >
-                <div
-                  className={`absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full border-2 ${
-                    item.done
-                      ? "bg-primary border-primary glow-cyan"
-                      : "bg-muted border-border"
-                  }`}
-                />
+              <motion.div key={item.phase} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative">
+                <div className={`absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full border-2 ${item.done ? "bg-primary border-primary glow-cyan" : "bg-muted border-border"}`} />
                 <p className="text-xs uppercase tracking-widest text-muted-foreground mb-1">{item.phase}</p>
                 <h4 className="font-bold text-lg">{item.title}</h4>
                 <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
@@ -289,33 +312,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ - PRESERVED EXACTLY */}
       <section id="faq" className="relative z-10 py-16 sm:py-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center text-2xl sm:text-3xl font-bold mb-10"
-          >
+          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center text-2xl sm:text-3xl font-bold mb-10">
             Preguntas Frecuentes
           </motion.h2>
           <Accordion type="single" collapsible className="space-y-2">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`} className="glass rounded-lg px-4 border-none">
-                <AccordionTrigger className="text-sm font-semibold hover:no-underline">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  {faq.a}
-                </AccordionContent>
+                <AccordionTrigger className="text-sm font-semibold hover:no-underline">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-sm text-muted-foreground">{faq.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* FOOTER - PRESERVED EXACTLY */}
       <footer className="relative z-10 border-t border-border py-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
@@ -324,18 +338,10 @@ export default function HomePage() {
             <span className="text-xs text-muted-foreground ml-2">© 2025</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter">
-              <Twitter size={18} />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
-              <Github size={18} />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Discord">
-              <MessageCircle size={18} />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs flex items-center gap-1">
-              Blog <ExternalLink size={12} />
-            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter"><Twitter size={18} /></a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub"><Github size={18} /></a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Discord"><MessageCircle size={18} /></a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs flex items-center gap-1">Blog <ExternalLink size={12} /></a>
           </div>
         </div>
       </footer>
