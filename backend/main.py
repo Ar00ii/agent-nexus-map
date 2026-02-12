@@ -1,49 +1,70 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from google import genai
-from dotenv import load_dotenv
-import os
+import uvicorn
+from google import genai 
 
-# Cargar variables de entorno
-load_dotenv()
+# --- TU CLAVE API ---
+API_KEY = "AIzaSyCCQdSWdpgAWhHwclYws5HrfLHsJXIsfqE"
 
-# Configurar cliente de Gemini
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise RuntimeError("GEMINI_API_KEY no encontrada en el archivo .env")
+# Configuración del cliente
+try:
+    client = genai.Client(api_key=API_KEY)
+    print("✅ Cliente Gemini activado")
+except Exception as e:
+    print(f"❌ Error activando cliente: {e}")
 
-client = genai.Client(api_key=api_key)
+app = FastAPI()
 
-# Crear app FastAPI
-app = FastAPI(title="Moltbook AI Backend")
-
-# Configurar CORS para conectar con el frontend
+# --- CORS (Crucial para que la web acepte el paquete) ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Modelo de datos
-class Message(BaseModel):
-    message: str
+class ChatRequest(BaseModel):
+    message: str 
 
-# Ruta principal para verificar que el backend funciona
 @app.get("/")
-async def root():
-    return {"status": "Moltbook AI Backend corriendo correctamente"}
+def read_root():
+    return {"status": "Nexus AI Backend Online"}
 
-# Ruta del chat con IA
 @app.post("/chat")
-async def chat(msg: Message):
+async def chat_endpoint(request: ChatRequest):
     try:
+        print(f"📩 Pregunta recibida: {request.message}")
+        
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=msg.message
+            model="gemini-2.5-flash", 
+            contents=request.message
         )
-        return {"reply": response.text}
+        
+        texto_ia = response.text
+        print(f"🤖 Respuesta IA: {texto_ia}") 
+
+        # --- LA LLAVE UNIVERSAL ---
+        # Enviamos el dato con TODAS las etiquetas posibles
+        return {
+            "response": texto_ia,  # Estándar 1
+            "answer": texto_ia,    # Estándar 2
+            "message": texto_ia,   # Estándar 3
+            "content": texto_ia,   # Estándar 4
+            "reply": texto_ia,     # Estándar 5
+            "text": texto_ia,      # Estándar 6
+            "sources": []          # Por si la web busca fuentes y falla si no las ve
+        }
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"❌ Error generando respuesta: {e}")
+        return {
+            "response": "Error interno", 
+            "answer": "Error interno",
+            "message": "Error interno"
+        }
+
+if __name__ == "__main__":
+    # Puerto 8000
+    uvicorn.run(app, host="0.0.0.0", port=8000)
