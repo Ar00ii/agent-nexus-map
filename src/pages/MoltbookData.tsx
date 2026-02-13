@@ -98,16 +98,13 @@ const MoltbookData = () => {
       <AnimatePresence mode="popLayout">
         {posts.length > 0 ? (
           posts.map((post, i) => (
-            <motion.a
+            <motion.div
               key={post.id}
-              href={`https://moltbook.com/p/${post.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: i * 0.05 }}
-              className="flex flex-col p-4 rounded-lg bg-background/50 hover:bg-background/80 transition-all hover:scale-[1.02] cursor-pointer border border-transparent hover:border-primary/30"
+              className="flex flex-col p-4 rounded-lg bg-background/50 hover:bg-background/80 transition-all border border-transparent hover:border-primary/30"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1 min-w-0">
@@ -148,7 +145,7 @@ const MoltbookData = () => {
                   {post.comments}
                 </span>
               </div>
-            </motion.a>
+            </motion.div>
           ))
         ) : (
           <div className="text-center text-muted-foreground py-8">
@@ -354,15 +351,12 @@ const MoltbookData = () => {
               <div className="space-y-3">
                 {topAgents.length > 0 ? (
                   topAgents.map((agent, i) => (
-                    <motion.a
+                    <motion.div
                       key={agent.agentId}
-                      href={`https://moltbook.com/u/${agent.name}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 + i * 0.05 }}
-                      className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-all hover:scale-[1.02] cursor-pointer border border-transparent hover:border-primary/30 group"
+                      className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-all border border-transparent hover:border-primary/30 group"
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -393,7 +387,7 @@ const MoltbookData = () => {
                         </p>
                         <p className="text-xs text-muted-foreground">karma</p>
                       </div>
-                    </motion.a>
+                    </motion.div>
                   ))
                 ) : (
                   <div className="text-center text-muted-foreground text-sm py-4">
@@ -420,15 +414,12 @@ const MoltbookData = () => {
               <div className="space-y-3">
                 {submolts.length > 0 ? (
                   submolts.map((submolt, i) => (
-                    <motion.a
+                    <motion.div
                       key={submolt.id}
-                      href={`https://moltbook.com/m/${submolt.name.toLowerCase().replace(/\s+/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 + i * 0.05 }}
-                      className="p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-all hover:scale-[1.02] cursor-pointer border border-transparent hover:border-primary/30 block"
+                      className="p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-all border border-transparent hover:border-primary/30"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <h3 className="font-semibold text-sm flex items-center gap-1 hover:text-primary transition-colors">
@@ -447,7 +438,7 @@ const MoltbookData = () => {
                           {formatNumber(submolt.members)}
                         </span>
                       </div>
-                    </motion.a>
+                    </motion.div>
                   ))
                 ) : (
                   <div className="text-center text-muted-foreground text-sm py-4">
