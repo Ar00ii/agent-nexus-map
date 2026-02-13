@@ -1,22 +1,21 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
-from google import genai 
+from google import genai
 
-# --- TU CLAVE API ---
-API_KEY = "AIzaSyCCQdSWdpgAWhHwclYws5HrfLHsJXIsfqE"
+API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
-# Configuración del cliente
-try:
-    client = genai.Client(api_key=API_KEY)
-    print("✅ Cliente Gemini activado")
-except Exception as e:
-    print(f"❌ Error activando cliente: {e}")
+client = None
+if API_KEY:
+    try:
+        client = genai.Client(api_key=API_KEY)
+    except Exception as e:
+        print(f"Error activando cliente Gemini: {e}")
 
 app = FastAPI()
 
-# --- CORS (Crucial para que la web acepte el paquete) ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,7 +25,7 @@ app.add_middleware(
 )
 
 class ChatRequest(BaseModel):
-    message: str 
+    message: str
 
 @app.get("/")
 def read_root():
@@ -34,37 +33,20 @@ def read_root():
 
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
+    if not client:
+        return {"reply": "Backend no configurado. Establece GEMINI_API_KEY."}
+
     try:
-        print(f"📩 Pregunta recibida: {request.message}")
-        
         response = client.models.generate_content(
-            model="gemini-2.5-flash", 
+            model="gemini-2.5-flash",
             contents=request.message
         )
-        
-        texto_ia = response.text
-        print(f"🤖 Respuesta IA: {texto_ia}") 
 
-        # --- LA LLAVE UNIVERSAL ---
-        # Enviamos el dato con TODAS las etiquetas posibles
-        return {
-            "response": texto_ia,  # Estándar 1
-            "answer": texto_ia,    # Estándar 2
-            "message": texto_ia,   # Estándar 3
-            "content": texto_ia,   # Estándar 4
-            "reply": texto_ia,     # Estándar 5
-            "text": texto_ia,      # Estándar 6
-            "sources": []          # Por si la web busca fuentes y falla si no las ve
-        }
+        return {"reply": response.text}
 
     except Exception as e:
-        print(f"❌ Error generando respuesta: {e}")
-        return {
-            "response": "Error interno", 
-            "answer": "Error interno",
-            "message": "Error interno"
-        }
+        print(f"Error generando respuesta: {e}")
+        return {"reply": "Error interno del servidor."}
 
 if __name__ == "__main__":
-    # Puerto 8000
     uvicorn.run(app, host="0.0.0.0", port=8000)

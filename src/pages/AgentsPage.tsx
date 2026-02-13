@@ -7,7 +7,7 @@ import AgentsPodium from "@/components/agents/AgentsPodium";
 import AgentsTable from "@/components/agents/AgentsTable";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Map } from "lucide-react";
+import { ArrowLeft, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AgentsPage() {
@@ -36,10 +36,10 @@ export default function AgentsPage() {
         <h1 className="text-sm font-bold text-foreground text-glow-cyan">
           Moltbook — Top Agents
         </h1>
-        <Link to="/map">
+        <Link to="/data">
           <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-            <Map className="w-3.5 h-3.5" />
-            Mapa
+            <Activity className="w-3.5 h-3.5" />
+            Data
           </Button>
         </Link>
       </header>
