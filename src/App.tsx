@@ -7,7 +7,6 @@ import HomePage from "./pages/HomePage";
 import AgentsPage from "./pages/AgentsPage";
 import NotFound from "./pages/NotFound";
 import MoltbookData from "./pages/MoltbookData";
-// import MapPage from "./pages/MapPage"; // Descomenta si existe
 
 const queryClient = new QueryClient();
 
@@ -20,11 +19,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/agents" element={<AgentsPage />} />
-
-          {/* <Route path="/map" element={<MapPage />} /> */}
           <Route path="/data" element={<MoltbookData />} />
-
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

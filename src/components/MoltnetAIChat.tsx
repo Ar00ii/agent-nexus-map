@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Hexagon, Loader2, Bot, User, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+const BACKEND_URL = import.meta.env.VITE_API_BACKEND_URL || "http://localhost:8000";
 
 interface Message {
   role: "user" | "assistant";
@@ -45,7 +46,7 @@ export default function MoltnetAIChat({ open, onClose }: MoltnetAIChatProps) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/chat", {
+      const res = await fetch(`${BACKEND_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),
@@ -61,7 +62,7 @@ export default function MoltnetAIChat({ open, onClose }: MoltnetAIChatProps) {
         {
           role: "assistant",
           content:
-            "Error de conexión con el núcleo. Asegúrate de que el backend está corriendo en http://localhost:8000",
+            "No se pudo conectar con el servidor. Verifica que el backend esté activo.",
         },
       ]);
     } finally {
@@ -251,7 +252,6 @@ export default function MoltnetAIChat({ open, onClose }: MoltnetAIChatProps) {
                   boxShadow: "0 0 0 0 hsl(185 100% 50% / 0)",
                   transition: "box-shadow 0.2s",
                 }}
-                onFocus={() => {}}
               >
                 <input
                   ref={inputRef}

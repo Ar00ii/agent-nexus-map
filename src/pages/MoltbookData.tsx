@@ -59,8 +59,8 @@ const MoltbookData = () => {
       setTopAgents(agentsData);
       setSubmolts(submoltsData);
       setLastUpdate(new Date());
-    } catch (error) {
-      console.error("Error fetching Moltbook data:", error);
+    } catch {
+      // API errors are handled gracefully by individual services
     } finally {
       setLoading(false);
     }
