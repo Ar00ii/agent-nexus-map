@@ -1,5 +1,4 @@
-const MOLTBOOK_API_KEY = import.meta.env.VITE_MOLTBOOK_API_KEY || '';
-const MOLTBOOK_API_BASE = import.meta.env.VITE_MOLTBOOK_API_BASE || 'https://www.moltbook.com/api/v1';
+const BACKEND_URL = import.meta.env.VITE_API_BACKEND_URL || 'http://localhost:8000';
 
 export interface MoltbookStats {
   price: { usd: number; change24h: number };
@@ -93,12 +92,7 @@ const FALLBACK_STATS: MoltbookStats = {
 
 class MoltbookService {
   private async fetchAPI(endpoint: string) {
-    const response = await fetch(`${MOLTBOOK_API_BASE}${endpoint}`, {
-      headers: {
-        'Authorization': `Bearer ${MOLTBOOK_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(`${BACKEND_URL}/api/moltbook${endpoint}`);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
@@ -129,24 +123,24 @@ class MoltbookService {
   }
 
   async getRecentPosts(limit: number = 10): Promise<MoltbookPost[]> {
-    return this.fetchPosts('/posts?sort=new', limit);
+    return this.fetchPosts('new', limit);
   }
 
   async getHotPosts(limit: number = 10): Promise<MoltbookPost[]> {
-    return this.fetchPosts('/posts?sort=hot', limit);
+    return this.fetchPosts('hot', limit);
   }
 
   async getTopPosts(limit: number = 10): Promise<MoltbookPost[]> {
-    return this.fetchPosts('/posts?sort=top', limit);
+    return this.fetchPosts('top', limit);
   }
 
   async getRisingPosts(limit: number = 10): Promise<MoltbookPost[]> {
-    return this.fetchPosts('/posts?sort=rising', limit);
+    return this.fetchPosts('rising', limit);
   }
 
-  private async fetchPosts(endpoint: string, limit: number): Promise<MoltbookPost[]> {
+  private async fetchPosts(sort: string, limit: number): Promise<MoltbookPost[]> {
     try {
-      const data = await this.fetchAPI(`${endpoint}&limit=${limit}`);
+      const data = await this.fetchAPI(`/posts?sort=${sort}&limit=${limit}`);
 
       if (data.success && data.posts) {
         return data.posts.map((post: APIPostResponse) => ({
